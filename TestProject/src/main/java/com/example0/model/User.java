@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,35 +24,32 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@ToString
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Transactional
-@Table
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	//이름
-	private String name;
-	//이메일
-	@Column(nullable = false)
-	private String useremail;
-	//비밀번호
-	private String password;
-	//나이
-	private int age;
-	//전화번호
-	private String tel;
-	//권한
-	private String role;
-	//사업자번호
-	private String businessnum;
-	//유저:리뷰 1:다 연결
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-	@JsonIgnoreProperties("user")
-	//@JsonBackReference
-	private List<Review> reviews;
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Column(nullable = false)
+    private String email;
+
+    private String password;
+
+    private int age;
+
+    private String tel;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private String businessNum;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("user")
+    private List<Review> reviews;
+
 }

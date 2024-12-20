@@ -2,7 +2,6 @@ package com.example0.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,18 +10,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example0.model.Hotel;
-import com.example0.repository.BoardRepository;
+import com.example0.repository.HotelRepository;
 
 @Service
-public class BoardService {
+public class HotelService {
 	@Autowired
-	private BoardRepository boardRepository;
+	private HotelRepository hotelRepository;
 
 	// 숙소등록
 	public void hotelInsert(Hotel hotel, String uploadFolder) {
@@ -35,9 +32,9 @@ public class BoardService {
 			File saveFile = new File(uploadFolder, uploadFileName);
 			try {
 				file.transferTo(saveFile); // 파일 업로드
-				hotel.setFileimage(uploadFileName); // 테이블에 저장될 파일이름
+				hotel.setImage(uploadFileName); // 테이블에 저장될 파일이름
 
-				boardRepository.save(hotel);
+				hotelRepository.save(hotel);
 			} catch (IllegalStateException | IOException e) {
 				e.printStackTrace();
 			}
@@ -47,7 +44,7 @@ public class BoardService {
 	@Transactional
 	// 전체보기
 	public List<Hotel> findAll() {
-		return boardRepository.findAll();
+		return hotelRepository.findAll();
 	}
 
 	
@@ -55,25 +52,25 @@ public class BoardService {
 	public Page<Hotel> findAll(String field,String field2,String word,Pageable pageable) {
 		
 		if(!field2.isEmpty())
-			return boardRepository.sortHotel(word, pageable);
+			return hotelRepository.sortHotel(word, pageable);
 		if(field.equals("location1"))
-			return  boardRepository.findByLocation1Containing(word, pageable);
+			return  hotelRepository.findByAddressContaining(word, pageable);
 		
-		return boardRepository.findAll(pageable);
+		return hotelRepository.findAll(pageable);
 	}
 
 	
 	//개수 
 	public Long count() {
-		return boardRepository.count();
+		return hotelRepository.count();
 		}
 	 
 	//정렬 개수
 		public Long count(String field,String word) {
 			if(field.equals("location1"))
-				return boardRepository.cntLocationSearch(word);
+				return hotelRepository.cntLocationSearch(word);
 			
-			return boardRepository.count();
+			return hotelRepository.count();
 
 		}
 		/*
@@ -84,35 +81,34 @@ public class BoardService {
 	// 수정하기
 	@Transactional
 	public void update(Hotel hotel) {
-		Hotel b = boardRepository.findById(hotel.getH_num()).get();
-		b.setH_name(hotel.getH_name());
-		b.setLocation1(hotel.getLocation1());
-		b.setLocation2(hotel.getLocation2());
+		Hotel b = hotelRepository.findById(hotel.getId()).get();
+		b.setName(hotel.getName());
+		b.setAddress(hotel.getAddress());
 		b.setUpload(hotel.getUpload());
 		b.setGrade(hotel.getGrade());
-		b.setFileimage(hotel.getFileimage());
+		b.setImage(hotel.getImage());
 		b.setContent(hotel.getContent());
-		b.setH_tel(hotel.getH_tel());
+		b.setTel(hotel.getTel());
 		b.setPrice(hotel.getPrice());
 	}
 
 	// 삭제하기
 	@Transactional
 	public void delete(Long num) {
-		boardRepository.deleteById(num);
+		hotelRepository.deleteById(num);
 	}
 
 	// 상세보기
 	@Transactional
 	public Hotel findById(Long h_num) {
-		Hotel hotel = boardRepository.findById(h_num).get();
+		Hotel hotel = hotelRepository.findById(h_num).get();
 		return hotel;
 
 	}
 
 	//내호텔리스트
 	public List<Hotel> myhotel(Long u_num) {
-		return boardRepository.myHotel(u_num);
+		return hotelRepository.myHotel(u_num);
 	}
 
 }

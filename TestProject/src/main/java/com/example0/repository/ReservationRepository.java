@@ -24,14 +24,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>{
 	
 	//호텔 예약 확인
 	@Query(value = "select * from reservation "
-			+ "where h_num=:hnum "
+			+ "where hotel_id=:id "
 			+ "and (check_out between :indate and :outdate "
 			+ "or check_in between :indate and :outdate)",
 			nativeQuery = true)//
 	public List<Reservation> CheckDate
 	(@Param("indate")Date inDate,
 	@Param("outdate")Date outDate,
-	@Param("hnum")Long hnum);
+	@Param("id")Long id);
 	
 	//유저의 예약 금액합산
 	@Query(value = "select sum(h.price) "

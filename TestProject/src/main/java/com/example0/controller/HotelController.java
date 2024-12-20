@@ -1,40 +1,32 @@
 package com.example0.controller;
 
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example0.config.auth.PrincipalDetails;
 import com.example0.model.Hotel;
 import com.example0.model.Reservation;
-import com.example0.model.User;
-import com.example0.repository.BoardRepository;
+import com.example0.repository.HotelRepository;
 import com.example0.repository.ReservationRepository;
-import com.example0.service.BoardService;
+import com.example0.service.HotelService;
 import com.example0.service.ReservationService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,11 +35,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
-public class BoardController {
+public class HotelController {
 @Autowired
-private BoardService boardService;
+private HotelService hotelService;
 @Autowired
-private BoardRepository boardRepository;
+private HotelRepository hotelRepository;
 @Autowired
 private ReservationService rservice;
 @Autowired
@@ -63,7 +55,7 @@ private ReservationRepository reservationRepository;
 				@AuthenticationPrincipal PrincipalDetails principal) {
 		String uploadFolder = session.getServletContext().getRealPath("/")+"\\resources\\img";
 		hotel.setUser(principal.getUser());
-		boardService.hotelInsert(hotel,uploadFolder);
+		hotelService.hotelInsert(hotel,uploadFolder);
 		return "redirect:hotellist";
 	}
 	
@@ -86,9 +78,9 @@ private ReservationRepository reservationRepository;
 			@RequestParam(required = false, defaultValue =  "")	String field, 
 			@RequestParam(required = false, defaultValue =  "")	String field2,
 			@RequestParam(required = false, defaultValue = "")	String word) {
-		Page<Hotel> lists= boardService.findAll(field, field2,word,pageable);
+		Page<Hotel> lists= hotelService.findAll(field, field2,word,pageable);
 		//카운트
-		Long count = boardService.count(field,word);
+		Long count = hotelService.count(field,word);
 		System.out.println(lists);
 		System.out.println(word);
 		System.out.println(field);
@@ -102,7 +94,7 @@ private ReservationRepository reservationRepository;
 	//숙소 상세보기
 	@GetMapping("detail/{h_num}")
 	public String detail(@PathVariable Long h_num,Model model) {
-		model.addAttribute("hotel",boardService.findById(h_num));
+		model.addAttribute("hotel", hotelService.findById(h_num));
 		return "/hotel/hotelDetail1";
 	}
 
@@ -127,26 +119,26 @@ private ReservationRepository reservationRepository;
 	@PutMapping("update")
 	@ResponseBody
 	public String update(@RequestBody Hotel hotel) {
-		boardService.update(hotel);
+		hotelService.update(hotel);
 		return "success";
 	} 
 	//숙소수정폼
 	@GetMapping("update/{h_num}")
 	 public String update(@PathVariable Long h_num, Model model) {
-		model.addAttribute("hotel", boardService.findById(h_num));
+		model.addAttribute("hotel", hotelService.findById(h_num));
 		return "/hotel/hotelupdate";
 	}
 	//숙소상세보기
 	@GetMapping("view/{h_num}")
 	public String view(@PathVariable Long h_num, Model model) {
-		model.addAttribute("hotel", boardService.findById(h_num) );
+		model.addAttribute("hotel", hotelService.findById(h_num) );
 		return "/hotel/hotelview";
 	}
 	//숙소삭제
 	@DeleteMapping("delete/{num}")
 	@ResponseBody
 		public String delete(@PathVariable Long num) {
-		boardService.delete(num);
+		hotelService.delete(num);
 		return "success";
 		}
 	
@@ -156,14 +148,14 @@ private ReservationRepository reservationRepository;
 	public String insert(@RequestBody Reservation reservation,
 						@AuthenticationPrincipal PrincipalDetails principal,
 						@PathVariable Long h_num) {
-		Hotel hotel = boardRepository.findById(h_num).get();
+		Hotel hotel = hotelRepository.findById(h_num).get();
 		
 		reservation.setHotel(hotel);
 		reservation.setUser(principal.getUser());
 		if(reservationRepository.CheckDate
 				(reservation.getCheck_in(),
 				reservation.getCheck_out(),
-				hotel.getH_num()).isEmpty()) {
+				hotel.getId()).isEmpty()) {
 			rservice.reservationInsert(reservation);
 			return "success";
 		}
@@ -176,7 +168,7 @@ private ReservationRepository reservationRepository;
 	public String test(Model model, @PathVariable Long h_num) {
 		System.out.println(h_num);
 		model.addAttribute("reservation", rservice.reservationList(h_num));
-		model.addAttribute("hotel", boardService.findById(h_num));
+		model.addAttribute("hotel", hotelService.findById(h_num));
 		return "/hotel/hotelReservation";
 	}
 }

@@ -16,22 +16,12 @@ public class PrincipalDetailService implements UserDetailsService{
 	
 	//로그인 구현
 	@Override
-	public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
-		System.out.println("============================");
-		System.out.println("loadUserByUserEmail");
-		System.out.println(useremail);
-		User user = userRepository.findByUseremail(useremail);
-
-		System.out.println(user);
-		//유저일때 구분
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(email);
 		if(user == null) {
-			throw new UsernameNotFoundException(useremail);
+			throw new UsernameNotFoundException(email);
 		}
 		
-		PrincipalDetails pmember = new PrincipalDetails(user);
-		System.out.println("puser : " + user);
-		System.out.println("============================");
-		
-		return pmember;
+		return new PrincipalDetails(user);
 	}
 }

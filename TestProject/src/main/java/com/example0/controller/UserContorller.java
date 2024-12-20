@@ -1,8 +1,5 @@
 package com.example0.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +17,10 @@ import com.example0.model.Cart;
 import com.example0.model.Hotel;
 import com.example0.model.Reservation;
 import com.example0.model.User;
-import com.example0.repository.BoardRepository;
+import com.example0.repository.HotelRepository;
 import com.example0.repository.CartRepository;
 import com.example0.repository.ReservationRepository;
-import com.example0.service.BoardService;
+import com.example0.service.HotelService;
 import com.example0.service.CartService;
 import com.example0.service.CommentService;
 import com.example0.service.ReservationService;
@@ -38,10 +35,10 @@ public class UserContorller {
 
 	private final UserService uservice;
 	private final ReservationService rservice;
-	private final BoardService bservice;
+	private final HotelService bservice;
 	private final CommentService cservice;
 	private final CartService cartservice;
-	private final BoardRepository boardRepository;
+	private final HotelRepository hotelRepository;
 	private final ReservationRepository reservationRepository;
 	private final CartRepository cartRepository;
 	
@@ -116,7 +113,7 @@ public class UserContorller {
 	public String cartInsert(@RequestBody Cart cart,
 								@AuthenticationPrincipal PrincipalDetails principal,
 								@PathVariable Long h_num) {
-		Hotel hotel = boardRepository.findById(h_num).get();
+		Hotel hotel = hotelRepository.findById(h_num).get();
 		cart.setHotel(hotel);
 		cart.setUser(principal.getUser());
 		
@@ -145,11 +142,11 @@ public class UserContorller {
 		if(reservationRepository.CheckDate
 				(cart.getCheck_in(),
 				cart.getCheck_out(),
-				cart.getHotel().getH_num()).isEmpty()) {
+				cart.getHotel().getId()).isEmpty()) {
 			//예약테이블 추가
 			rservice.reservationInsert(r);
 			//장바구니 삭제
-			cartservice.cartDelete(cart.getCart_num());
+			cartservice.cartDelete(cart.getId());
 			return "success";
 		}
 		return "fail";

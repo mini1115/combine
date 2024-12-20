@@ -7,9 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example0.model.Hotel;
 import com.example0.model.Review;
-import com.example0.repository.BoardRepository;
+import com.example0.repository.HotelRepository;
 import com.example0.repository.CommentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-	private final BoardRepository boardRepository;
+	private final HotelRepository hotelRepository;
 	private final CommentRepository commentRepository;
 	
 	//호텔댓글리스트 

@@ -22,7 +22,7 @@ public class UserService {
 	
 	//가입
 	public void register(User user) {
-		System.out.println(user);
+
 		String rawPassword = user.getPassword();
 		String encPassword = encoder.encode(rawPassword);
 		user.setPassword(encPassword);
@@ -48,16 +48,16 @@ public class UserService {
 	@Transactional
 	public void update(User user) {
 		//유저정보 담기
-		User u  = userRepository.findById(user.getId()).get();
+		User updateUser  = userRepository.findById(user.getId()).get();
 		//비밀번호암호화
 		String rawPassword = user.getPassword();
 		String encPassword = encoder.encode(rawPassword);
 		//업데이트
-		u.setName(user.getName());
-		u.setUseremail(user.getUseremail());
-		u.setPassword(encPassword);
-		u.setTel(user.getPassword());
-		u.setBusinessnum(user.getBusinessnum());
+		updateUser.setName(user.getName());
+		updateUser.setEmail(user.getEmail());
+		updateUser.setPassword(encPassword);
+		updateUser.setTel(user.getTel());
+		updateUser.setBusinessNum(user.getBusinessNum());
 	}
 	
 	

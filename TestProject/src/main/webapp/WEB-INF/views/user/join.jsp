@@ -29,8 +29,8 @@
 					</tr>
 					<tr>
 						<td>이메일(Email)</td>
-						<td><input type="text" class="form-control" id="useremail"
-							placeholder="Enter email" name="useremail"></td>
+						<td><input type="text" class="form-control" id="email"
+							placeholder="Enter email" name="email"></td>
 					</tr>
 
 					<tr>
@@ -57,7 +57,7 @@
 					<tr>
 						<td><div id="business1" style="display: none;">사업자번호</div></td>
 						<td><div id="business2" style="display: none;"><input type="text" class="form-control"
-								 id="businessnum"placeholder="Enter business" name="businessnum"></div></td>
+								 id="businessNum"placeholder="Enter business" name="businessNum"></div></td>
 					</tr>
 
 				</table>
@@ -97,14 +97,14 @@ $("#btnJoin").click(function() {
 		$("#name").focus();
 		return false;
 	}
-	if ($("#useremail").val() == "") {
-		alert("아이디를 입력하세요")
-		$("#useremail").focus();
+	if ($("#email").val() == "") {
+		alert("이메일을 입력하세요")
+		$("#email").focus();
 		return false;
 	}
-	if (!$("#useremail").val().match(regEmail)) {
+	if (!$("#email").val().match(regEmail)) {
 		alert("이메일 양식이 아닙니다");
-		$("#useremail").focus();
+		$("#email").focus();
 		return false;
 	}
 	if ($("#password").val() == "") {
@@ -138,11 +138,11 @@ $("#btnJoin").click(function() {
 	}
 	var dataParam = {
 		"name" : $("#name").val(),
-		"useremail" : $("#useremail").val(),
+		"email" : $("#email").val(),
 		"password" : $("#password").val(),
 		"age" : $("#age").val(),
 		"tel" : $("#tel").val(),
-		"businessnum" : $("#businessnum").val(),
+		"businessNum" : $("#businessNum").val(),
 		"role" : $("input[name=role]:checked").val()
 	}
 	$.ajax({

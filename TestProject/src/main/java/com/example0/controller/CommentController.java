@@ -1,32 +1,23 @@
 package com.example0.controller;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example0.config.auth.PrincipalDetails;
 import com.example0.model.Hotel;
 import com.example0.model.Review;
-import com.example0.model.User;
-import com.example0.repository.BoardRepository;
+import com.example0.repository.HotelRepository;
 import com.example0.service.CommentService;
 
 @RestController
@@ -36,7 +27,7 @@ public class CommentController {
 	private CommentService commentService;
 	//댓글리스트
 	@Autowired
-	private BoardRepository boardRepository;
+	private HotelRepository hotelRepository;
 	
 	 @GetMapping("list/{h_num}") 
 	 public List<Review> list(@PathVariable Long h_num){ 
@@ -59,7 +50,7 @@ public class CommentController {
 				@RequestBody Review review,
 				@AuthenticationPrincipal PrincipalDetails principal) {
 			System.out.println("principal : " + principal);
-			Hotel h = boardRepository.findById(num).get();
+			Hotel h = hotelRepository.findById(num).get();
 			review.setHotel(h);
 			review.setUser(principal.getUser());//user
 			

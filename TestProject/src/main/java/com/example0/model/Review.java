@@ -33,27 +33,25 @@ import lombok.Setter;
 @Entity
 @Table
 public class Review {
-	// 리뷰 기본키
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long review_num;
-	// 리뷰 내용
-	private String content;
-	// 리뷰 작성일 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date regdate;
-	// 점수
-	private float point;
-	// 리뷰:유저 다:1 연결
-	@ManyToOne
-	//@JsonIgnore
-	@JoinColumn(name = "u_num")
-	private User user;
-	// 리뷰:호텔 다:1 연결
-	@ManyToOne
-	@JsonIgnore
-	@JoinColumn(name = "h_num")
-	private Hotel hotel;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long review_num;
+
+    private String content;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date regdate;
+
+    private float point;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "hotel_id")
+    private Hotel hotel;
 }

@@ -59,7 +59,7 @@ public class HomeController {
 	@ResponseBody
 	public String register(@RequestBody User user) {
 		//중복확인
-		if(userRepository.findByUseremail(user.getUseremail())!=null) {
+		if(userRepository.findByEmail(user.getEmail())!=null) {
 			return "fail";
 		}
 		userService.register(user);

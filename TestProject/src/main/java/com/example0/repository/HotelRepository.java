@@ -13,7 +13,7 @@ import org.springframework.data.repository.query.Param;
 import com.example0.model.Hotel;
 
 
-public interface BoardRepository extends JpaRepository<Hotel, Long> {
+public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
 	@Query(value ="select * from hotel order by price" ,countQuery = "select count(*) from hotel", nativeQuery = true)
 	public Page<Hotel>priceCategory(Pageable pageable);
@@ -27,7 +27,7 @@ public interface BoardRepository extends JpaRepository<Hotel, Long> {
 	 * cntTitleSearch();
 	 */
 	//위치기반 검색리스트//
-	Page<Hotel> findByLocation1Containing(String location1,Pageable pageable);
+	Page<Hotel> findByAddressContaining(String address1,Pageable pageable);
 
 	@Query(value = "select * from hotel where location1 like CONCAT('%',:word,'%') order by price", 
 			countQuery = "select count(*) from hotel sc where location1 like CONCAT('%',:word,'%')", 
@@ -42,7 +42,7 @@ public interface BoardRepository extends JpaRepository<Hotel, Long> {
 	@Query("select count(*) from Hotel")
 	public int getCount(HashMap<String, Object> map);
 
-	@Query(value = "select * from hotel where u_num=:id", nativeQuery = true)
+	@Query(value = "select * from hotel where user_id=:id", nativeQuery = true)
 	public List<Hotel> myHotel(@Param("id") Long id);
 
 //>>>>>>> branch 'main' of https://github.com/web01project/combine.git

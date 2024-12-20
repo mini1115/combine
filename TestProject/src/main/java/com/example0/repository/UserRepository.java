@@ -11,7 +11,7 @@ import com.example0.model.User;
 
 public interface UserRepository 
 			extends JpaRepository<User, Long>{
-	User findByUseremail(String useremail);
+	User findByEmail(String email);
 	
 	//쿼리 어드민제외 리스트
 	@Query(value = "select * from user where role != 'ROLE_ADMIN' order by role",

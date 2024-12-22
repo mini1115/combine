@@ -1,7 +1,10 @@
-package com.example0.model;
+package com.example0.model.hotel;
 
+import com.example0.model.user.User;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,7 @@ import lombok.Setter;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="HOTEL_ID")
     private Long id;
 
     private String name;
@@ -43,7 +46,7 @@ public class Hotel {
 
     private int price;
 
-    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     @ManyToOne
@@ -53,7 +56,7 @@ public class Hotel {
     @Transient //객체에서 빼기
     private MultipartFile upload;
 
-    private String Image;
+    private String image;
 
     private String content;
 

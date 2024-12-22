@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 
+### MYSQL DB ###
+application-db.properties
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

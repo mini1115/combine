@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example0.config.auth.PrincipalDetails;
-import com.example0.model.Hotel;
-import com.example0.model.Review;
+import com.example0.model.hotel.Hotel;
+import com.example0.model.hotel.Review;
 import com.example0.repository.HotelRepository;
 import com.example0.service.CommentService;
 

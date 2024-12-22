@@ -26,14 +26,13 @@
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="/css/styles.css" rel="stylesheet" />
 
-<!-- principal로 유저정보 연결 -->
 <sec:authorize access="isAuthenticated()">
 	<sec:authentication property="principal" var="principal"/>
 </sec:authorize>
 
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- 달력 -->
+
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <body>
@@ -53,7 +52,7 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link"
-							href="/hotel/hotellist"> 숙소리스트 </a></li>				
+							href="/hotel/hotelList"> 숙소리스트 </a></li>
 					<sec:authorize access="isAnonymous()">
 						<li class="nav-item"><a class="nav-link" href="/login">로그인</a></li>
 						<li class="nav-item"><a class="nav-link" href=" /register">회원가입</a></li>

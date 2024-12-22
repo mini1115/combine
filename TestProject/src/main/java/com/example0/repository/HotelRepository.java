@@ -10,27 +10,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example0.model.Hotel;
+import com.example0.model.hotel.Hotel;
 
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-	@Query(value ="select * from hotel order by price" ,countQuery = "select count(*) from hotel", nativeQuery = true)
-	public Page<Hotel>priceCategory(Pageable pageable);
-	/*
-	 * @Query("select count(*) from Hotel") public int getCount(HashMap<String,
-	 * Object> map);
-	 */
-	//가격 검색 개수
-	/*
-	 * @Query(value = "select count(*) from hotel", nativeQuery=true) public Long
-	 * cntTitleSearch();
-	 */
-	//위치기반 검색리스트//
 	Page<Hotel> findByAddressContaining(String address1,Pageable pageable);
 
-	@Query(value = "select * from hotel where location1 like CONCAT('%',:word,'%') order by price", 
-			countQuery = "select count(*) from hotel sc where location1 like CONCAT('%',:word,'%')", 
+	@Query(value = "select * from hotel where address.address1 like CONCAT('%',:word,'%') order by price",
+			countQuery = "select count(*) from hotel sc where address.address1 like CONCAT('%',:word,'%')",
 			nativeQuery = true)
 	Page<Hotel> sortHotel(@Param("word") String word, Pageable pageable);
 	
@@ -45,7 +33,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 	@Query(value = "select * from hotel where user_id=:id", nativeQuery = true)
 	public List<Hotel> myHotel(@Param("id") Long id);
 
-//>>>>>>> branch 'main' of https://github.com/web01project/combine.git
 }
 
  

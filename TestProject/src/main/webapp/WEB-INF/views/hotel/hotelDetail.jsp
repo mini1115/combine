@@ -3,16 +3,14 @@
 <%@ include file="../include/header.jsp"%>
 <link href="/css/detail.css" rel="stylesheet" />
 <div id="wapper">
-	<!--헤더시작-->
-
 	<header>
-		<h3>${hotel.h_name }</h3>
+		<h3>${hotel.name }</h3>
 
 		<button type="button" id="mapBtn">
 			<span id="span_detail">지도에서 보기</span>
 
 		</button>
-		<span>${hotel.location1 } </span><span>${hotel.location2 } </span>
+		<span>${hotel.address.address1 } </span><span>${hotel.address.address2 } </span>
 	</header>
 	<!--네비게이션-->
 	<div class="total">
@@ -25,7 +23,7 @@
 		<!--콘텐츠부분-->
 		<section id="section_detail">
 
-			<img class="center" src="/resources/img/${hotel.fileimage }">
+			<img class="center" src="/resources/img/${hotel.image}">
  
 		</section>
 		<!--사이드바-->
@@ -86,9 +84,9 @@
 <div class="parent">
 	<div class="child">금액:${hotel.price }</div>
 	<div class="child2">설명:${hotel.content }</div>
-	<div class="child">전화번호:${hotel.h_tel }</div>
+	<div class="child">전화번호:${hotel.tel }</div>
 	<div class="child">
-		<a href="/hotel/reservationform/${hotel.h_num }">
+		<a href="/hotel/reservationForm/${hotel.id }">
 		<button	class="button-19">예약하기</button></a>
 	</div>
 </div>
@@ -113,7 +111,7 @@
 	// 주소로 좌표를 검색합니다
 	geocoder
 			.addressSearch(
-					'${hotel.location1 }',
+					'${hotel.address.address1 }',
 					function(result, status) {
 
 						// 정상적으로 검색이 완료됐으면 
@@ -138,7 +136,7 @@
 							// 인포윈도우로 장소에 대한 설명을 표시합니다
 							var infowindow = new kakao.maps.InfoWindow(
 									{
-										content : '<div style="width:150px;text-align:center;padding:6px 0;">${hotel.h_name}</div>'
+										content : '<div style="width:150px;text-align:center;padding:6px 0;">${hotel.name}</div>'
 									});
 							infowindow.open(map, marker);
 
@@ -149,7 +147,7 @@
 	var init = function(){
 		$.ajax({
 			type:"get",
-			url : "/reply/list/${hotel.h_num }"
+			url : "/reply/list/${hotel.id }"
 		}) //ajax
 		.done(function(resp){
 		
@@ -210,7 +208,7 @@
 		}
 		$.ajax({
 			type : "post",
-			url : "/reply/insert/${hotel.h_num }",
+			url : "/reply/insert/${hotel.id }",
 			contentType : "application/json;charset=utf-8",
 			data : JSON.stringify(data)
 		}).done(function() {
@@ -225,11 +223,11 @@
 	
 	$.ajax({
 		type:"delete",
-		url : "/hotel/delete/${hotel.h_num}",
+		url : "/hotel/delete/${hotel.id}",
 		success: function(resp){
 			if(resp=="success"){
 				alert("삭제성공")
-				location.href="/hotel/hotellist"
+				location.href="/hotel/hotelList"
 			}
 		},//success
 		error :function(e){

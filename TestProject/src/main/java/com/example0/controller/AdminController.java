@@ -16,21 +16,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Controller
 public class AdminController {
-	
-	private final UserService uservice;
-	
-	//유저리스트
-	@GetMapping("userList")
-	public String userlist(Model model) {
-		model.addAttribute("users",uservice.ulist());
-		return "admin/userList";
-	}
-	
-	//유저삭제
-	@DeleteMapping("delete/{id}")
-	@ResponseBody
-	public String delete(@PathVariable Long id) {
-		uservice.delete(id);
-		return "success";
-	}
+
+    private final UserService uservice;
+
+    //유저리스트
+    @GetMapping("userList")
+    public String userlist(Model model) {
+        model.addAttribute("users", uservice.ulist());
+        return "admin/userList";
+    }
+
+    //유저삭제
+    @DeleteMapping("delete/{id}")
+    @ResponseBody
+    public String delete(@PathVariable Long id) {
+        uservice.delete(id);
+        return "success";
+    }
 }

@@ -1,5 +1,6 @@
-package com.example0.model;
+package com.example0.model.user;
 
+import com.example0.model.hotel.Review;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,8 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.transaction.Transactional;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,6 +29,7 @@ import lombok.Setter;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long id;
 
     private String name;

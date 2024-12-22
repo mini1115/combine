@@ -2,12 +2,10 @@ package com.example0.service;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
-import com.example0.model.Reservation;
+import com.example0.model.hotel.Reservation;
 import com.example0.repository.ReservationRepository;
-import com.example0.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

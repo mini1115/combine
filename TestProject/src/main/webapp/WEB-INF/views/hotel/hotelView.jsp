@@ -10,29 +10,29 @@
 				<h4>숙소상세보기</h4>
 				<table>
 					<tr>
-						<td><label for="h_num">관리 번호</label>
-						<td><input type="text" class="form-control" id="h_num"
-							name="h_num" value="${hotel.h_num }" readonly="readonly"></td>
+						<td><label for="id">관리 번호</label>
+						<td><input type="text" class="form-control" id="id"
+							name="id" value="${hotel.id }" readonly="readonly"></td>
 					</tr>
 					<tr>
 						<td><label for="name">숙소 이름</label></td>
-						<td><input type="text" class="form-control" id="h_name"
-							name="h_name" value="${hotel.h_name }" readonly="readonly"></td>
+						<td><input type="text" class="form-control" id="name"
+							name="name" value="${hotel.name }" readonly="readonly"></td>
 					</tr>
 					<tr>
 						<td>숙소 주소</td>
-						<td><input type="text" class="form-control" id="location1"
-							name="location1" value="${hotel.location1 }" readonly="readonly" /></td>
+						<td><input type="text" class="form-control" id="address1"
+							name="address.address1" value="${hotel.address.address1 }" readonly="readonly" /></td>
 					</tr>
 					<tr>
 						<td>상세 주소</td>
-						<td><input type="text" class="form-control" id="location2"
-							name="location2" value="${hotel.location2 }" readonly="readonly" /></td>
+						<td><input type="text" class="form-control" id="address2"
+							name="address2" value="${hotel.address.address2 }" readonly="readonly" /></td>
 					</tr>
 					<tr>
 						<td>우편번호</td>
 						<td><input type="text" class="form-control" id="zipcode"
-							name="zipcode" value="${hotel.zipcode }" readonly="readonly" /></td>
+							name="address.zipcode" value="${hotel.address.zipcode }" readonly="readonly" /></td>
 					</tr>
 					<%-- <tr>
 							<td><label for="upload">숙소 사진</label></td>
@@ -54,7 +54,7 @@
 					<tr>
 						<td><label for="title">전화번호</label></td>
 						<td><input type="text" class="form-control" id="h_tel"
-							name="h_tel" value="${hotel.h_tel }" readonly="readonly"></td>
+							name="h_tel" value="${hotel.tel }" readonly="readonly"></td>
 					</tr>
 					<tr>
 						<td><label for="price">금액</label></td>
@@ -96,7 +96,7 @@
 var init = function(){
 	$.ajax({
 		type:"get",
-		url : "/reply/list/${hotel.h_num }"
+		url : "/reply/list/${hotel.id }"
 	}) //ajax
 	.done(function(resp){
 	
@@ -144,11 +144,11 @@ $("#btnComment").click(function() {
 	}
 	data = {
 		"content" : $("#msg").val(),
-		"h_num": ${hotel.h_num }
+		"id": ${hotel.id }
 	}
 	$.ajax({
 		type : "post",
-		url : "/reply/insert/${hotel.h_num }",
+		url : "/reply/insert/${hotel.id }",
 		contentType : "application/json;charset=utf-8",
 		data : JSON.stringify(data)
 	}).done(function() {
@@ -163,11 +163,11 @@ $("#btnDelete").click(function(){
 	if(!confirm("정말 삭제할까요?")) return
 	$.ajax({
 		type:"delete",
-		url : "/hotel/delete/${hotel.h_num}",
+		url : "/hotel/delete/${hotel.id}",
 		success: function(resp){
 			if(resp=="success"){
 				alert("삭제성공")
-				location.href="/hotel/hotellist"
+				location.href="/hotel/hotelList"
 			}
 		},//success
 		error :function(e){

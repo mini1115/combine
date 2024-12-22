@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.example0.model.Cart;
+import com.example0.model.hotel.Cart;
 import com.example0.repository.CartRepository;
 
 import lombok.RequiredArgsConstructor;

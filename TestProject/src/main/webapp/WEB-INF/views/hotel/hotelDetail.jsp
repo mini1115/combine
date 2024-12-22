@@ -13,10 +13,11 @@
 		<span>${hotel.address.address1 } </span><span>${hotel.address.address2 } </span>
 	</header>
 	<!--네비게이션-->
+
 	<div class="total">
 		<nav id="nav_detail">
 			<div id="mapView"></div>
-			<div id="map" style="width: 100%; height: 100%;">맵정보</div>
+			<div id="map" style="width:100%;height:350px;">위치정보</div>
 			<div id="clickLatlng"></div>
 		</nav>
 
@@ -91,98 +92,43 @@
 	</div>
 </div>
 
-
-
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6fa928439db918e52edfb39bd62d69f5&libraries=services,clusterer,drawing"></script>
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoAPI}&libraries=services,clusterer,drawing">
+</script>
 <script>
+    var hotelAddress = '${hotel.address.address1}';
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	mapOption = {
-		center : new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-		level : 3
-	// 지도의 확대 레벨
-	};
-	// 지도를 생성합니다    
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
 	var map = new kakao.maps.Map(mapContainer, mapOption);
 
-	// 주소-좌표 변환 객체를 생성합니다
-	var geocoder = new kakao.maps.services.Geocoder();
+    var geocoder = new kakao.maps.services.Geocoder();
 
-	// 주소로 좌표를 검색합니다
-	geocoder
-			.addressSearch(
-					'${hotel.address.address1 }',
-					function(result, status) {
+	geocoder.addressSearch(hotelAddress, function(result, status) {
 
-						// 정상적으로 검색이 완료됐으면 
-						if (status === kakao.maps.services.Status.OK) {
+        // 정상적으로 검색이 완료됐으면
+         if (status === kakao.maps.services.Status.OK) {
 
-							var coords = new kakao.maps.LatLng(result[0].y,
-									result[0].x);
-							var message = 'latlng: new kakao.maps.LatLng('
-									+ result[0].y + ', ';
-							message += result[0].x + ')';
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-							var resultDiv = document
-									.getElementById('clickLatlng');
-							/* resultDiv.innerHTML = message; */
+            // 결과값으로 받은 위치를 마커로 표시합니다
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: coords
+            });
 
-							// 결과값으로 받은 위치를 마커로 표시합니다
-							var marker = new kakao.maps.Marker({
-								map : map,
-								position : coords
-							});
+            // 인포윈도우로 장소에 대한 설명을 표시합니다
+            var infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+            });
+            infowindow.open(map, marker);
 
-							// 인포윈도우로 장소에 대한 설명을 표시합니다
-							var infowindow = new kakao.maps.InfoWindow(
-									{
-										content : '<div style="width:150px;text-align:center;padding:6px 0;">${hotel.name}</div>'
-									});
-							infowindow.open(map, marker);
-
-							// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-							map.setCenter(coords);
-						}
-					});
-	var init = function(){
-		$.ajax({
-			type:"get",
-			url : "/reply/list/${hotel.id }"
-		}) //ajax
-		.done(function(resp){
-		
-			   var str="<table class='table table-hover' >"
-			   $.each(resp, function(key, val){
-					
-				   str+="<tr>"
-				    str+="<td>"+val.user.name+"</td>"
-				   str+="<td>"+val.content+"</td>"
-				   str+="<td>"+val.regdate+"</td>"
-				   str+="<td>"+val.point+"점</td>"
-				    if("${principal.user.id}"==val.user.id){
-					   str+="<td><a href='javascript:fdel("+val.review_num+")'>삭제</a></td>"
-				   } 
-				   str+="</tr>" 
-			   })
-			   str +="</table>"
-				  $("#replyResult").html(str);
-		})  //done
-
-	} //init
-	//댓글삭제
-	function fdel(review_num){
-		$.ajax({
-			type:"delete",
-			url : "/reply/delete/"+review_num
-		})
-		.done(function(resp){
-			alert(resp+" 번 글 삭제 성공")
-			init()
-		})
-		.fail(function(){
-			alert("댓글 삭제 실패")
-		})
-	}
+            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+            map.setCenter(coords);
+        }
+    });
 	//지도에서 보기 클릭
 	$(document).ready(function(){
 	$("#mapBtn").click(function(){
@@ -191,51 +137,6 @@
 		 
 	});
 	});
-	
-	$("#btnComment").click(function() {
-		if(${empty principal.user}){
-			alert("로그인하세요")
-			location.href="/login"
-			return
-		}
-		if ($("#msg").val() == "") {
-			alert("댓글 입력하세요")
-			return;
-		}
-		data = {
-			"content" : $("#msg").val(),
-			"point" : $("input[name=point]:checked").val()
-		}
-		$.ajax({
-			type : "post",
-			url : "/reply/insert/${hotel.id }",
-			contentType : "application/json;charset=utf-8",
-			data : JSON.stringify(data)
-		}).done(function() {
-			alert("댓글추가");
-			init();
-		}).fail(function() {
-			alert("댓글 추가 실패")
-		})
-	})
-	$("#btnDelete").click(function(){
-	if(!confirm("정말 삭제할까요?")) return
-	
-	$.ajax({
-		type:"delete",
-		url : "/hotel/delete/${hotel.id}",
-		success: function(resp){
-			if(resp=="success"){
-				alert("삭제성공")
-				location.href="/hotel/hotelList"
-			}
-		},//success
-		error :function(e){
-			alert("삭제실패 : " + e)
-		}
-	}) 
-	})
-	init();
 
 </script>
 <%@ include file="../include/footer.jsp"%>

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -46,6 +47,9 @@ public class HotelController {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Value("${kakao_api_key}")
+    private String kakaoApiKey;
+
     @GetMapping("hotelInsert")
     public String insert() {
         return "/hotel/hotelInsert";
@@ -77,6 +81,7 @@ public class HotelController {
     @GetMapping("detail/{id}")
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("hotel", hotelService.findById(id));
+        model.addAttribute("kakaoAPI",kakaoApiKey);
         return "/hotel/hotelDetail";
     }
 
